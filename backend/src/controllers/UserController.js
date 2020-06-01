@@ -1,6 +1,7 @@
 const connection = require('../database/connection');
 //const crypto = require('crypto');
 const generateUniqueId = require('../utils/generateUniqueId');
+const encryptPWD = require('../utils/encryptPWD');
 
 module.exports = {
 
@@ -14,10 +15,16 @@ module.exports = {
         //const params = request.query;
         //const params = request.params;
 
-        const { name, email, pwd } = request.body;
+        const { name, email } = request.body;
 
         //const id = crypto.randomBytes(4).toString('HEX');
         const id = generateUniqueId();
+
+        console.log(request.body.pwd);
+
+        const pwd = encryptPWD(request.body.pwd);
+
+        console.log(pwd);
 
         await connection('user').insert({
             id,

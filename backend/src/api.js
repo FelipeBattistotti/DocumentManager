@@ -4,19 +4,19 @@ const { celebrate, Segments, Joi } = require('celebrate');
 //const OngController = require('./controllers/OngController');
 //const IncidentController = require('./controllers/IncidentController');
 //const ProfileController = require('./controllers/ProfileController');
-//const SessionController = require('./controllers/SessionController');
 
 const UserController = require('./controllers/UserController');
+const SessionController = require('./controllers/SessionController');
 
 const routes = express.Router();
 
-
+/**
+ * GET user
+ */
 routes.get('/user', UserController.index);
 
 /**
- * Query
- * Route
- * Body
+ * POST user
  */
 routes.post('/user', celebrate({
     [Segments.BODY]: Joi.object().keys({
@@ -26,7 +26,15 @@ routes.post('/user', celebrate({
     })
 }), UserController.create);
 
+/**
+ * DELETE user
+ */
 routes.delete('/user/:id', UserController.delete);
+
+/**
+ * POST sessions
+ */
+routes.post('/sessions', SessionController.create);
 
 
 /*
@@ -50,7 +58,6 @@ routes.get('/profile', celebrate({
     }).unknown(),
 }), ProfileController.index);
 
-routes.post('/sessions', SessionController.create);
 */
 
 module.exports = routes;
