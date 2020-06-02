@@ -1,5 +1,4 @@
 const connection = require('../database/connection');
-//const crypto = require('crypto');
 const generateUniqueId = require('../utils/generateUniqueId');
 const encryptPWD = require('../utils/encryptPWD');
 
@@ -12,19 +11,12 @@ module.exports = {
     },
 
     async create(request, response) {
-        //const params = request.query;
-        //const params = request.params;
 
         const { name, email } = request.body;
 
-        //const id = crypto.randomBytes(4).toString('HEX');
-        const id = generateUniqueId();
+        const id = generateUniqueId(); // gera um ID para o usuario
 
-        console.log(request.body.pwd);
-
-        const pwd = encryptPWD(request.body.pwd);
-
-        console.log(pwd);
+        const pwd = encryptPWD(request.body.pwd); // criptografa a senha
 
         await connection('user').insert({
             id,
@@ -33,25 +25,11 @@ module.exports = {
             pwd,
         });
 
-        //console.log(data);
-
         return response.json({ id });
     },
 
     async delete(request, response) {
         const { id } = request.params;
-        //const ong_id = request.headers.authorization;
-
-        /*
-        const incident = await connection('user')
-            .where('id', id)
-            .select('ong_id')
-            .first();
-        */
-
-        //if (incident.ong_id != ong_id) {
-            //return response.status(401).json({ error: 'Operation not permitted.' });
-        //}
 
         await connection('user').where('id', id).delete();
 

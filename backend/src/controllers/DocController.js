@@ -1,40 +1,37 @@
 const connection = require('../database/connection');
+const copyPDF = require('../utils/copyPDF');
 
 module.exports = {
     async index(request, response) {
         const { page = 1 } = request.query;
 
-        const [count] = await connection('incidents').count();
+        const [count] = await connection('doc').count();
 
-        console.log(count);
-
-        const incidents = await connection('incidents')
-            .join('ongs', 'ongs.id', '=', 'incidents.ong_id')
+        const doc = await connection('doc')
+            .join('user', 'user.id', '=', 'doc.user_id')
             .limit(5)
             .offset((page - 1) * 5)
             .select([
-                'incidents.*',
-                'ongs.name',
-                'ongs.email',
-                'ongs.whatsapp',
-                'ongs.city',
-                'ongs.uf'
+                'doc.*'
             ]);
 
         response.header('X-Total-Count', count['count(*)']);
 
-        return response.json(incidents);
+        return response.json(doc);
     },
 
     async create(request, response) {
-        const { title, description, value } = request.body;
-        const ong_id = request.headers.authorization;
+        const { name, size, path } = request.body;
+        const user_id = request.headers.authorization;
 
-        const [id] = await connection('incidents').insert({
-            title,
-            description,
-            value,
-            ong_id,
+        const content = copyPDF(request.body.path);
+
+        const [id] = await connection('doc').insert({
+            name,
+            content,
+            size,
+            path,
+            user_id,
         });
 
         return response.json({ id });
@@ -42,18 +39,18 @@ module.exports = {
 
     async delete(request, response) {
         const { id } = request.params;
-        const ong_id = request.headers.authorization;
+        const user_id = request.headers.authorization;
 
-        const incident = await connection('incidents')
+        const doc = await connection('doc')
             .where('id', id)
-            .select('ong_id')
+            .select('user_id')
             .first();
 
-        if (incident.ong_id != ong_id) {
+        if (doc.user_id != user_id) {
             return response.status(401).json({ error: 'Operation not permitted.' });
         }
 
-        await connection('incidents').where('id', id).delete();
+        await connection('doc').where('id', id).delete();
 
         return response.status(204).send();
     }
