@@ -31,7 +31,7 @@ routes.delete('/user/:id', UserController.delete);
 /**
  * POST sessions
  */
-routes.post('/sessions', SessionController.create);
+routes.post('/session', SessionController.create);
 
 /**
  * GET doc
