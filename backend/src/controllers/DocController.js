@@ -25,7 +25,6 @@ module.exports = {
     async create(request, response) {
         const { name, size, path } = request.body;
         const user_id = request.headers.authorization;
-
         const content = copyPDF(request.body.path);
 
         const [id] = await connection('doc').insert({
