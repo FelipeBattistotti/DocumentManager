@@ -14,7 +14,6 @@ A API Node.js possui um mecanismo de autenticação para identificar o usuário 
   <img alt="Snapshot1" src=".github/snapshot1.png">
   <img alt="Snapshot2" src=".github/snapshot2.png">
 </p>
-<br/>
 <p align="center">
   <img alt="Snapshot3" src=".github/snapshot3.png">
   <img alt="Snapshot4" src=".github/snapshot4.png">
