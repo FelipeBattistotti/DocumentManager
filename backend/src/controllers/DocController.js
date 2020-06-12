@@ -25,7 +25,7 @@ module.exports = {
     async create(request, response) {
         const { name, size, path } = request.body;
         const user_id = request.headers.authorization;
-        const content = copyPDF(request.body.path);
+        const content = await copyPDF(request.body.path); // copia conteudo do arquivo
 
         const [id] = await connection('doc').insert({
             name,
@@ -48,7 +48,7 @@ module.exports = {
             .first();
 
         if (doc.user_id != user_id) {
-            return response.status(401).json({ error: 'Operation not permitted.' });
+            return response.status(401).json({ error: 'Operação não permitida.' });
         }
 
         await connection('doc').where('id', id).delete();
