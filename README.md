@@ -4,7 +4,7 @@
 </p>
 
 # Projeto
-Mobile App Gestão de Documentos
+<strong>Mobile App Gestão de Documentos</strong>
 
 Esse projeto tem por objetivo permitir fazer upload e armazenar arquivos em um App. O sistema também permite a leitura dos arquivos.<br/>
 A API Node.js possui um mecanismo de autenticação para identificar o usuário que está fazendo as requisições.
