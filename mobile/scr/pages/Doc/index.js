@@ -57,24 +57,32 @@ export default function Doc () {
     }
 
     const uploadDoc = async () => {
-        let result = await DocumentPicker.getDocumentAsync({}); // faz o upload do arquivo
-
+        let result = await DocumentPicker.getDocumentAsync({});
         if (result.type === "success") {
-            const name = result.name;
-            const size = result.size;
-            const path = result.uri;
-
-            try {
-                // salva o documento no banco de dados
-                const response = await api.post('doc', { name, size, path }, { headers: { Authorization: userId } });
-
-                ToastAndroid.show("Upload realizado com Sucesso!", ToastAndroid.SHORT);
-            }
-            catch (err) {
-                alert('Falha ao carregar o documento!');
-            }
+            upload(result);
         }
     }
+
+    const upload = async data => {
+       const formData = new FormData();
+       const info = {
+          uri: data.uri,
+          name: data.name,
+          type: `application/${data.name.split(".").reverse()[0]}`
+       };
+
+       formData.append("file", info);
+
+       try {
+            // salva o documento no banco de dados
+            const response = await api.post('upload', formData, { headers: { Authorization: userId } });
+
+            ToastAndroid.show("Upload realizado com Sucesso!", ToastAndroid.SHORT);
+       }
+       catch (err) {
+            alert('Falha ao carregar o documento!');
+       }
+    };
 
     return (
         <View style={styles.container}>

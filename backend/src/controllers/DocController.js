@@ -54,5 +54,20 @@ module.exports = {
         await connection('doc').where('id', id).delete();
 
         return response.status(204).send();
+    },
+
+    async createDoc(doc) {
+        const { name, size, path, user_id } = doc;
+        const content = await copyPDF(path); // copia conteudo do arquivo
+
+        const [id] = await connection('doc').insert({
+            name,
+            content,
+            size,
+            path,
+            user_id,
+        });
+
+        return id;
     }
 };
